@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.16 FATAL_ERROR)
 
-set(KF5_MIN_VERSION "5.83.0")
-set(PIM_VERSION "5.18.1")
+set(KF5_MIN_VERSION "5.99.0")
+set(PIM_VERSION "5.22.3")
 
 project(GrantleeTheme VERSION ${PIM_VERSION})
 
@@ -11,7 +11,7 @@ set(CMAKE_MODULE_PATH ${GrantleeTheme_SOURCE_DIR}/cmake ${ECM_MODULE_PATH})
 
 include(KDEInstallDirs)
 include(KDECMakeSettings)
-include(KDEFrameworkCompilerSettings NO_POLICY_SCOPE)
+include(KDECompilerSettings NO_POLICY_SCOPE)
 
 include(GenerateExportHeader)
 include(ECMSetupVersion)
@@ -20,7 +20,12 @@ include(ECMGeneratePriFile)
 
 include(FeatureSummary)
 include(KDEGitCommitHooks)
+include(KDEClangFormat)
+file(GLOB_RECURSE ALL_CLANG_FORMAT_SOURCE_FILES *.cpp *.h *.c)
+kde_clang_format(${ALL_CLANG_FORMAT_SOURCE_FILES})
+
 include(ECMQtDeclareLoggingCategory)
+include(ECMDeprecationSettings)
 include(ECMAddTests)
 
 include(KPIMGrantleeMacros)
@@ -28,17 +33,25 @@ include(KPIMGrantleeMacros)
 
 set(GRANTLEETHEME_LIB_VERSION ${PIM_VERSION})
 
-set(QT_REQUIRED_VERSION "5.15.0")
+set(QT_REQUIRED_VERSION "5.15.2")
+if (QT_MAJOR_VERSION STREQUAL "6")
+    set(QT_REQUIRED_VERSION "6.4.0")
+endif()
 set(GRANTLEE_VERSION "5.2")
 
-find_package(Qt5 ${QT_REQUIRED_VERSION} CONFIG REQUIRED Widgets Network)
+find_package(Qt${QT_MAJOR_VERSION} ${QT_REQUIRED_VERSION} CONFIG REQUIRED Widgets Network)
 find_package(KF5GuiAddons ${KF5_MIN_VERSION} CONFIG REQUIRED)
 find_package(KF5I18n ${KF5_MIN_VERSION} CONFIG REQUIRED)
 find_package(KF5IconThemes ${KF5_MIN_VERSION} CONFIG REQUIRED)
 find_package(KF5NewStuff ${KF5_MIN_VERSION} CONFIG REQUIRED)
 
-find_package(Grantlee5 ${GRANTLEE_VERSION} CONFIG REQUIRED)
-
+if (QT_MAJOR_VERSION STREQUAL "5")
+    find_package(Grantlee5 ${GRANTLEE_VERSION} CONFIG REQUIRED)
+    set(MAIN_LIB Grantlee5::Templates)
+else()
+    find_package(KF6TextTemplate CONFIG REQUIRED)
+    set(MAIN_LIB KF6TextTemplate::Templates)
+endif()
 ecm_setup_version(PROJECT VARIABLE_PREFIX GRANTLEETHEME
                         VERSION_HEADER "${CMAKE_CURRENT_BINARY_DIR}/grantleetheme_version.h"
                         PACKAGE_VERSION_FILE "${CMAKE_CURRENT_BINARY_DIR}/KF5GrantleeThemeConfigVersion.cmake"
@@ -47,11 +60,9 @@ ecm_setup_version(PROJECT VARIABLE_PREFIX GRANTLEETHEME
 
 ########### Targets ###########
 
-add_definitions(-DQT_DISABLE_DEPRECATED_BEFORE=0x050e00)
-add_definitions(-DKF_DISABLE_DEPRECATED_BEFORE_AND_AT=0x055400)
+ecm_set_disabled_deprecation_versions(QT 5.14.0 KF 5.99.0)
 
-set(CMAKE_CXX_STANDARD 17)
-set(CMAKE_CXX_STANDARD_REQUIRED ON)
+
 
 option(USE_UNITY_CMAKE_SUPPORT "Use UNITY cmake support (speedup compile time)" OFF)
 
@@ -79,13 +90,13 @@ install(EXPORT KF5GrantleeThemeTargets DESTINATION "${CMAKECONFIG_INSTALL_DIR}" 
 
 install(FILES
    ${CMAKE_CURRENT_BINARY_DIR}/grantleetheme_version.h
-  DESTINATION ${KDE_INSTALL_INCLUDEDIR_KF5} COMPONENT Devel
+  DESTINATION ${KDE_INSTALL_INCLUDEDIR_KF}/GrantleeTheme COMPONENT Devel
 )
 
 
 add_subdirectory(src)
 if (BUILD_TESTING)
-    find_package(Qt5 ${QT_REQUIRED_VERSION} CONFIG REQUIRED Test)
+    find_package(Qt${QT_MAJOR_VERSION} ${QT_REQUIRED_VERSION} CONFIG REQUIRED Test)
    add_subdirectory(autotest)
 endif()
 

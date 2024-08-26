@@ -5,8 +5,12 @@
  */
 
 #include "palette.h"
-
+#include <QObject>
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
 #include <grantlee/metatype.h>
+#else
+#include <KTextTemplate/metatype.h>
+#endif
 
 #include <QPalette>
 
@@ -23,8 +27,11 @@ static const struct {
     ROLE(HighlightedText), ROLE(Light), ROLE(Link),        ROLE(LinkVisited), ROLE(Mid),        ROLE(Midlight),   ROLE(PlaceholderText),
     ROLE(Shadow),          ROLE(Text),  ROLE(ToolTipBase), ROLE(ToolTipText), ROLE(Window),     ROLE(WindowText),
 };
-
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
 GRANTLEE_BEGIN_LOOKUP(QPalette)
+#else
+KTEXTTEMPLATE_BEGIN_LOOKUP(QPalette)
+#endif
 auto group = QPalette::Inactive;
 auto roleName = property;
 
@@ -45,9 +52,17 @@ for (const auto &role : color_roles) {
     }
 }
 return {};
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
 GRANTLEE_END_LOOKUP
+#else
+KTEXTTEMPLATE_END_LOOKUP
+#endif
 
 void Palette::registerMetaType()
 {
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
     Grantlee::registerMetaType<QPalette>();
+#else
+    KTextTemplate::registerMetaType<QPalette>();
+#endif
 }

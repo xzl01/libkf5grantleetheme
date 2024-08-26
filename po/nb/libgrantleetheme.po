@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2021-01-27 03:06+0100\n"
+"POT-Creation-Date: 2022-05-17 00:45+0000\n"
 "PO-Revision-Date: 2013-10-01 23:22+0200\n"
 "Last-Translator: Bjørn Steensrud <bjornst@skogkatt.homelinux.org>\n"
 "Language-Team: Norwegian Bokmål <l10n-no@lister.huftis.org>\n"
@@ -19,32 +19,32 @@ msgstr ""
 "X-Accelerator-Marker: &\n"
 "X-Text-Markup: kde4\n"
 
-#: grantleetheme.cpp:91
+#: grantleetheme.cpp:93 grantleetheme.cpp:101
 #, kde-format
 msgid "Template"
 msgstr "Mal"
 
-#: grantleetheme.cpp:91
+#: grantleetheme.cpp:93 grantleetheme.cpp:101
 #, kde-format
 msgid "Error message"
 msgstr ""
 
-#: grantleetheme.cpp:97
+#: grantleetheme.cpp:108
 #, kde-format
 msgid "(null template)"
 msgstr ""
 
-#: grantleetheme.cpp:214
+#: grantleetheme.cpp:225
 #, kde-format
 msgid "Template parsing error"
 msgstr ""
 
-#: grantleetheme.cpp:220
+#: grantleetheme.cpp:234
 #, kde-format
 msgid "Template rendering error"
 msgstr ""
 
-#: grantleethememanager.cpp:41
+#: grantleethememanager.cpp:42
 #, kde-format
-msgid "Download New Themes..."
-msgstr "Last ned nye temaer …"
+msgid "Download new Templates..."
+msgstr ""

@@ -1,13 +1,13 @@
 # Copyright (C) YEAR This_file_is_part_of_KDE
 # This file is distributed under the same license as the PACKAGE package.
 #
-# Steve Allewell <steve.allewell@gmail.com>, 2014, 2015, 2017.
+# Steve Allewell <steve.allewell@gmail.com>, 2014, 2015, 2017, 2022.
 msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2021-01-27 03:06+0100\n"
-"PO-Revision-Date: 2017-05-21 16:36+0000\n"
+"POT-Creation-Date: 2022-05-17 00:45+0000\n"
+"PO-Revision-Date: 2022-07-22 14:30+0100\n"
 "Last-Translator: Steve Allewell <steve.allewell@gmail.com>\n"
 "Language-Team: British English <kde-l10n-en_gb@kde.org>\n"
 "Language: en_GB\n"
@@ -15,34 +15,37 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Lokalize 2.0\n"
+"X-Generator: Lokalize 22.04.3\n"
 
-#: grantleetheme.cpp:91
+#: grantleetheme.cpp:93 grantleetheme.cpp:101
 #, kde-format
 msgid "Template"
 msgstr "Template"
 
-#: grantleetheme.cpp:91
+#: grantleetheme.cpp:93 grantleetheme.cpp:101
 #, kde-format
 msgid "Error message"
 msgstr "Error message"
 
-#: grantleetheme.cpp:97
+#: grantleetheme.cpp:108
 #, kde-format
 msgid "(null template)"
 msgstr "(null template)"
 
-#: grantleetheme.cpp:214
+#: grantleetheme.cpp:225
 #, kde-format
 msgid "Template parsing error"
 msgstr "Template parsing error"
 
-#: grantleetheme.cpp:220
+#: grantleetheme.cpp:234
 #, kde-format
 msgid "Template rendering error"
 msgstr "Template rendering error"
 
-#: grantleethememanager.cpp:41
+#: grantleethememanager.cpp:42
 #, kde-format
-msgid "Download New Themes..."
-msgstr "Download New Themes..."
+msgid "Download new Templates..."
+msgstr "Download new Templates..."
+
+#~ msgid "Download New Themes..."
+#~ msgstr "Download New Themes..."

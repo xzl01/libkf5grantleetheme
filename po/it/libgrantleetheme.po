@@ -1,13 +1,13 @@
 # Copyright (C) YEAR This_file_is_part_of_KDE
 # This file is distributed under the same license as the PACKAGE package.
-# Luigi Toscano <luigi.toscano@tiscali.it>, 2013, 2015, 2017.
+# Luigi Toscano <luigi.toscano@tiscali.it>, 2013, 2015, 2017, 2022.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: libgrantleetheme\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2021-01-27 03:06+0100\n"
-"PO-Revision-Date: 2017-04-22 22:18+0100\n"
+"POT-Creation-Date: 2022-05-17 00:45+0000\n"
+"PO-Revision-Date: 2022-05-07 23:36+0200\n"
 "Last-Translator: Luigi Toscano <luigi.toscano@tiscali.it>\n"
 "Language-Team: Italian <kde-i18n-it@kde.org>\n"
 "Language: it\n"
@@ -15,34 +15,37 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Lokalize 2.0\n"
+"X-Generator: Lokalize 21.12.3\n"
 
-#: grantleetheme.cpp:91
+#: grantleetheme.cpp:93 grantleetheme.cpp:101
 #, kde-format
 msgid "Template"
 msgstr "Modello"
 
-#: grantleetheme.cpp:91
+#: grantleetheme.cpp:93 grantleetheme.cpp:101
 #, kde-format
 msgid "Error message"
 msgstr "Messaggio di errore"
 
-#: grantleetheme.cpp:97
+#: grantleetheme.cpp:108
 #, kde-format
 msgid "(null template)"
 msgstr "(modello nullo)"
 
-#: grantleetheme.cpp:214
+#: grantleetheme.cpp:225
 #, kde-format
 msgid "Template parsing error"
 msgstr "Errore nell'analisi del modello"
 
-#: grantleetheme.cpp:220
+#: grantleetheme.cpp:234
 #, kde-format
 msgid "Template rendering error"
 msgstr "Errore nella resa del modello"
 
-#: grantleethememanager.cpp:41
+#: grantleethememanager.cpp:42
 #, kde-format
-msgid "Download New Themes..."
-msgstr "Scarica nuovi temi..."
+msgid "Download new Templates..."
+msgstr "Scarica nuovi modelli..."
+
+#~ msgid "Download New Themes..."
+#~ msgstr "Scarica nuovi temi..."

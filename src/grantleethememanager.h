@@ -1,5 +1,5 @@
 /*
-  SPDX-FileCopyrightText: 2013-2021 Laurent Montel <montel@kde.org>
+  SPDX-FileCopyrightText: 2013-2022 Laurent Montel <montel@kde.org>
 
   SPDX-License-Identifier: LGPL-2.1-or-later
 */
@@ -10,6 +10,9 @@
 #include "grantleetheme_export.h"
 #include <QMap>
 #include <QObject>
+
+#include <memory>
+
 class QActionGroup;
 class KActionCollection;
 class KToggleAction;
@@ -17,6 +20,8 @@ class KActionMenu;
 
 namespace GrantleeTheme
 {
+class ThemeManagerPrivate;
+
 /**
  * @brief The ThemeManager class
  * @author Laurent montel <montel@kde.org>
@@ -30,7 +35,7 @@ public:
                           KActionCollection *actionCollection = nullptr,
                           const QString &path = QString(),
                           QObject *parent = nullptr);
-    ~ThemeManager();
+    ~ThemeManager() override;
 
     Q_REQUIRED_RESULT QMap<QString, GrantleeTheme::Theme> themes() const;
 
@@ -58,8 +63,8 @@ Q_SIGNALS:
     void updateThemes();
 
 private:
-    class Private;
-    Private *const d;
+    friend class ThemeManagerPrivate;
+    std::unique_ptr<ThemeManagerPrivate> const d;
     Q_PRIVATE_SLOT(d, void directoryChanged())
 };
 }

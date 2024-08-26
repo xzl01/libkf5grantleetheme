@@ -1,25 +1,38 @@
 kde_enable_exceptions()
 
-set(grantleeplugin_SRCS
+
+add_library(kde_grantlee_plugin MODULE)
+target_sources(kde_grantlee_plugin PRIVATE
     kdegrantleeplugin.cpp
     color.cpp
     colorscheme.cpp
     icon.cpp
     palette.cpp
-)
 
-add_library(kde_grantlee_plugin MODULE ${grantleeplugin_SRCS})
+    kdegrantleeplugin.h
+    color.h
+    colorscheme.h
+    icon.h
+    palette.h
+    )
+
 if (COMPILE_WITH_UNITY_CMAKE_SUPPORT)
     set_target_properties(kde_grantlee_plugin PROPERTIES UNITY_BUILD ON)
 endif()
 kpim_grantlee_adjust_plugin_name(kde_grantlee_plugin)
 target_link_libraries(kde_grantlee_plugin
-    Grantlee5::Templates
+    ${MAIN_LIB}
     KF5::IconThemes
     KF5::GuiAddons
     KF5::ConfigWidgets
 )
 
+if (QT_MAJOR_VERSION STREQUAL "5")
 install(TARGETS kde_grantlee_plugin
-        LIBRARY DESTINATION ${LIB_INSTALL_DIR}/grantlee/${Grantlee5_VERSION_MAJOR}.${Grantlee5_VERSION_MINOR}/
+        LIBRARY DESTINATION ${KDE_INSTALL_LIBDIR}/grantlee/${Grantlee5_VERSION_MAJOR}.${Grantlee5_VERSION_MINOR}/
 )
+else()
+    install(TARGETS kde_grantlee_plugin
+            LIBRARY DESTINATION ${KDE_INSTALL_LIBDIR}/KTextTemplate/${KF5_MIN_VERSION}/
+    )
+endif()

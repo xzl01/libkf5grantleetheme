@@ -1,16 +1,17 @@
 # Translation of libgrantleetheme.po to Catalan
-# Copyright (C) 2013-2017 This_file_is_part_of_KDE
+# Copyright (C) 2013-2022 This_file_is_part_of_KDE
 # This file is distributed under the license LGPL version 2.1 or
 # version 3 or later versions approved by the membership of KDE e.V.
 #
 # Antoni Bella Pérez <antonibella5@yahoo.com>, 2013, 2015, 2017.
+# Josep M. Ferrer <txemaq@gmail.com>, 2022.
 msgid ""
 msgstr ""
 "Project-Id-Version: grantleetheme\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2021-01-27 03:06+0100\n"
-"PO-Revision-Date: 2017-04-19 14:22+0100\n"
-"Last-Translator: Antoni Bella Pérez <antonibella5@yahoo.com>\n"
+"POT-Creation-Date: 2022-05-17 00:45+0000\n"
+"PO-Revision-Date: 2022-05-04 17:39+0200\n"
+"Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
 "Language: ca\n"
 "MIME-Version: 1.0\n"
@@ -18,34 +19,34 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 "X-Accelerator-Marker: &\n"
-"X-Generator: Lokalize 2.0\n"
+"X-Generator: Lokalize 20.12.0\n"
 
-#: grantleetheme.cpp:91
+#: grantleetheme.cpp:93 grantleetheme.cpp:101
 #, kde-format
 msgid "Template"
 msgstr "Plantilla"
 
-#: grantleetheme.cpp:91
+#: grantleetheme.cpp:93 grantleetheme.cpp:101
 #, kde-format
 msgid "Error message"
 msgstr "Missatge d'error"
 
-#: grantleetheme.cpp:97
+#: grantleetheme.cpp:108
 #, kde-format
 msgid "(null template)"
 msgstr "(plantilla nul·la)"
 
-#: grantleetheme.cpp:214
+#: grantleetheme.cpp:225
 #, kde-format
 msgid "Template parsing error"
 msgstr "Error en analitzar la plantilla"
 
-#: grantleetheme.cpp:220
+#: grantleetheme.cpp:234
 #, kde-format
 msgid "Template rendering error"
 msgstr "Error en renderitzar la plantilla"
 
-#: grantleethememanager.cpp:41
+#: grantleethememanager.cpp:42
 #, kde-format
-msgid "Download New Themes..."
-msgstr "Baixa temes nous..."
+msgid "Download new Templates..."
+msgstr "Baixa plantilles noves..."

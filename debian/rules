@@ -8,7 +8,7 @@ AbiVirtualPackageVersion = $(call dpkg_late_eval,AbiVirtualPackageVersion,echo '
 pkgs_lib = $(filter-out %-%,$(filter lib%,$(shell dh_listpackages)))
 
 %:
-	dh $@ --with kf5,pkgkde_symbolshelper
+	dh $@
 
 override_dh_makeshlibs:
 	for pkg in $(pkgs_lib); do \

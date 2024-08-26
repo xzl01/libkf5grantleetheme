@@ -1,5 +1,5 @@
 /*
-  SPDX-FileCopyrightText: 2014-2021 Laurent Montel <montel@kde.org>
+  SPDX-FileCopyrightText: 2014-2022 Laurent Montel <montel@kde.org>
 
   SPDX-License-Identifier: LGPL-2.1-or-later
 */
@@ -13,7 +13,7 @@ class GrantleeThemeTest : public QObject
     Q_OBJECT
 public:
     explicit GrantleeThemeTest(QObject *parent = nullptr);
-    ~GrantleeThemeTest();
+    ~GrantleeThemeTest() override;
 private Q_SLOTS:
     void shouldHaveDefaultValue();
     void shouldInvalidWhenPathIsNotValid();
@@ -25,6 +25,5 @@ private Q_SLOTS:
 
 private:
     bool validateHtml(const QString &path, const QString &name, const QString &html);
-    bool compareHtml(const QString &path, const QString &name);
+    bool compareHtml(const QString &generatedTheme, const QString &path, const QString &name);
 };
-

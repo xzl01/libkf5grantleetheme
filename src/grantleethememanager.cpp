@@ -1,5 +1,5 @@
 /*
-  SPDX-FileCopyrightText: 2013-2021 Laurent Montel <montel@kde.org>
+  SPDX-FileCopyrightText: 2013-2022 Laurent Montel <montel@kde.org>
 
   SPDX-License-Identifier: LGPL-2.1-or-later
 */
@@ -13,7 +13,7 @@
 #include <KConfigGroup>
 #include <KDirWatch>
 #include <KLocalizedString>
-#include <KNewStuff3/KNS3/QtQuickDialogWrapper>
+#include <KNSWidgets/Action>
 #include <KSharedConfig>
 #include <KToggleAction>
 #include <QAction>
@@ -25,11 +25,12 @@
 #include <QDirIterator>
 #include <QStandardPaths>
 
-using namespace GrantleeTheme;
-class Q_DECL_HIDDEN ThemeManager::Private
+namespace GrantleeTheme
+{
+class ThemeManagerPrivate
 {
 public:
-    Private(const QString &type, const QString &desktopFileName, KActionCollection *ac, const QString &relativePath, ThemeManager *qq)
+    ThemeManagerPrivate(const QString &type, const QString &desktopFileName, KActionCollection *ac, const QString &relativePath, ThemeManager *qq)
         : applicationType(type)
         , defaultDesktopFileName(desktopFileName)
         , actionCollection(ac)
@@ -38,16 +39,12 @@ public:
         watch = new KDirWatch(q);
         initThemesDirectories(relativePath);
         if (KAuthorized::authorize(QStringLiteral("ghns"))) {
-            downloadThemesAction = new QAction(i18n("Download New Themes..."), q);
-            downloadThemesAction->setIcon(QIcon::fromTheme(QStringLiteral("get-hot-new-stuff")));
+            downloadThemesAction = new KNSWidgets::Action(i18n("Download new Templates..."), QString(), q);
             if (actionCollection) {
                 actionCollection->addAction(QStringLiteral("download_header_themes"), downloadThemesAction);
             }
             separatorAction = new QAction(q);
             separatorAction->setSeparator(true);
-            q->connect(downloadThemesAction, &QAction::triggered, q, [this]() {
-                slotDownloadHeaderThemes();
-            });
         }
 
         q->connect(watch, &KDirWatch::dirty, q, [this]() {
@@ -70,15 +67,10 @@ public:
         }
     }
 
-    ~Private()
+    ~ThemeManagerPrivate()
     {
         removeActions();
         themes.clear();
-    }
-
-    void slotDownloadHeaderThemes()
-    {
-        KNS3::QtQuickDialogWrapper(downloadConfigFileName).exec();
     }
 
     void directoryChanged()
@@ -151,7 +143,9 @@ public:
         }
         if (separatorAction) {
             menu->removeAction(separatorAction);
-            menu->removeAction(downloadThemesAction);
+            if (downloadThemesAction) {
+                menu->removeAction(downloadThemesAction);
+            }
         }
         themesActionList.clear();
     }
@@ -175,7 +169,7 @@ public:
         while (i.hasNext()) {
             i.next();
             GrantleeTheme::Theme theme = i.value();
-            KToggleAction *act = new KToggleAction(theme.name(), q);
+            auto act = new KToggleAction(theme.name(), q);
             act->setToolTip(theme.description());
             act->setData(theme.dirName());
             if (theme.dirName() == themeActivated) {
@@ -199,7 +193,9 @@ public:
         }
         if (separatorAction) {
             menu->addAction(separatorAction);
-            menu->addAction(downloadThemesAction);
+            if (downloadThemesAction) {
+                menu->addAction(downloadThemesAction);
+            }
         }
     }
 
@@ -250,7 +246,6 @@ public:
 
     QString applicationType;
     QString defaultDesktopFileName;
-    QString downloadConfigFileName;
     QStringList themesDirectories;
     QMap<QString, GrantleeTheme::Theme> themes;
     QVector<KToggleAction *> themesActionList;
@@ -259,10 +254,12 @@ public:
     KActionMenu *menu = nullptr;
     KActionCollection *const actionCollection;
     QAction *separatorAction = nullptr;
-
-    QAction *downloadThemesAction = nullptr;
+    KNSWidgets::Action *downloadThemesAction = nullptr;
     ThemeManager *const q;
 };
+}
+
+using namespace GrantleeTheme;
 
 ThemeManager::ThemeManager(const QString &applicationType,
                            const QString &defaultDesktopFileName,
@@ -270,14 +267,11 @@ ThemeManager::ThemeManager(const QString &applicationType,
                            const QString &path,
                            QObject *parent)
     : QObject(parent)
-    , d(new Private(applicationType, defaultDesktopFileName, actionCollection, path, this))
+    , d(new ThemeManagerPrivate(applicationType, defaultDesktopFileName, actionCollection, path, this))
 {
 }
 
-ThemeManager::~ThemeManager()
-{
-    delete d;
-}
+ThemeManager::~ThemeManager() = default;
 
 QMap<QString, GrantleeTheme::Theme> ThemeManager::themes() const
 {
@@ -315,7 +309,7 @@ QStringList ThemeManager::displayExtraVariables(const QString &themename) const
             return i.value().displayExtraVariables();
         }
     }
-    return QStringList();
+    return {};
 }
 
 GrantleeTheme::Theme ThemeManager::theme(const QString &themeName)
@@ -325,7 +319,7 @@ GrantleeTheme::Theme ThemeManager::theme(const QString &themeName)
 
 void ThemeManager::setDownloadNewStuffConfigFile(const QString &configFileName)
 {
-    d->downloadConfigFileName = configFileName;
+    d->downloadThemesAction->setConfigFile(configFileName);
 }
 
 QString ThemeManager::pathFromThemes(const QString &themesRelativePath, const QString &themeName, const QString &defaultDesktopFileName)
@@ -354,7 +348,7 @@ QString ThemeManager::pathFromThemes(const QString &themesRelativePath, const QS
             }
         }
     }
-    return QString();
+    return {};
 }
 
 GrantleeTheme::Theme ThemeManager::loadTheme(const QString &themePath, const QString &dirName, const QString &defaultDesktopFileName)

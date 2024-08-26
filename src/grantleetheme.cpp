@@ -1,5 +1,5 @@
 /*
-  SPDX-FileCopyrightText: 2013-2021 Laurent Montel <montel@kde.org>
+  SPDX-FileCopyrightText: 2013-2022 Laurent Montel <montel@kde.org>
 
   SPDX-License-Identifier: LGPL-2.1-or-later
 */
@@ -21,7 +21,11 @@
 using namespace GrantleeTheme;
 
 QSharedPointer<GrantleeKi18nLocalizer> GrantleeTheme::ThemePrivate::sLocalizer;
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
 Grantlee::Engine *GrantleeTheme::ThemePrivate::sEngine = nullptr;
+#else
+KTextTemplate::Engine *GrantleeTheme::ThemePrivate::sEngine = nullptr;
+#endif
 
 ThemePrivate::ThemePrivate()
     : QSharedData()
@@ -29,22 +33,10 @@ ThemePrivate::ThemePrivate()
 }
 
 ThemePrivate::ThemePrivate(const ThemePrivate &other)
-    : QSharedData(other)
-    , displayExtraVariables(other.displayExtraVariables)
-    , themeFileName(other.themeFileName)
-    , description(other.description)
-    , name(other.name)
-    , dirName(other.dirName)
-    , absolutePaths(other.absolutePaths)
-    , author(other.author)
-    , email(other.email)
-    , loader(other.loader)
-{
-}
 
-ThemePrivate::~ThemePrivate()
-{
-}
+    = default;
+
+ThemePrivate::~ThemePrivate() = default;
 
 void ThemePrivate::setupEngine()
 {
@@ -61,7 +53,6 @@ void ThemePrivate::setupLoader()
         dir.cdUp();
         templatePaths << dir.absolutePath();
     }
-
     loader = QSharedPointer<GrantleeTheme::QtResourceTemplateLoader>::create();
     loader->setTemplateDirs(templatePaths);
     loader->setTheme(dirName);
@@ -71,20 +62,31 @@ void ThemePrivate::setupLoader()
     }
     sEngine->addTemplateLoader(loader);
 }
-
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
 Grantlee::Context ThemePrivate::createContext(const QVariantHash &data, const QByteArray &applicationDomain)
+#else
+KTextTemplate::Context ThemePrivate::createContext(const QVariantHash &data, const QByteArray &applicationDomain)
+#endif
 {
     if (!sLocalizer) {
         sLocalizer.reset(new GrantleeKi18nLocalizer());
     }
     sLocalizer->setApplicationDomain(applicationDomain);
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
     Grantlee::Context ctx(data);
+#else
+    KTextTemplate::Context ctx(data);
+#endif
     ctx.setLocalizer(sLocalizer);
     return ctx;
 }
-
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
 QString ThemePrivate::errorTemplate(const QString &reason, const QString &origTemplateName, const Grantlee::Template &failedTemplate)
+#else
+QString ThemePrivate::errorTemplate(const QString &reason, const QString &origTemplateName, const KTextTemplate::Template &failedTemplate)
+#endif
 {
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
     Grantlee::Template tpl = sEngine->newTemplate(QStringLiteral("<h1>{{ error }}</h1>\n"
                                                                  "<b>%1:</b> {{ templateName }}<br>\n"
                                                                  "<b>%2:</b> {{ errorMessage }}")
@@ -92,6 +94,15 @@ QString ThemePrivate::errorTemplate(const QString &reason, const QString &origTe
                                                   QStringLiteral("TemplateError"));
 
     Grantlee::Context ctx = createContext();
+#else
+    KTextTemplate::Template tpl = sEngine->newTemplate(QStringLiteral("<h1>{{ error }}</h1>\n"
+                                                                      "<b>%1:</b> {{ templateName }}<br>\n"
+                                                                      "<b>%2:</b> {{ errorMessage }}")
+                                                           .arg(i18n("Template"), i18n("Error message")),
+                                                       QStringLiteral("TemplateError"));
+
+    KTextTemplate::Context ctx = createContext();
+#endif
     ctx.insert(QStringLiteral("error"), reason);
     ctx.insert(QStringLiteral("templateName"), origTemplateName);
     const QString errorString = failedTemplate ? failedTemplate->errorString() : i18n("(null template)");
@@ -121,13 +132,10 @@ Theme::Theme(const QString &themePath, const QString &dirName, const QString &de
 }
 
 Theme::Theme(const Theme &other)
-    : d(other.d)
-{
-}
 
-Theme::~Theme()
-{
-}
+    = default;
+
+Theme::~Theme() = default;
 
 bool Theme::operator==(const Theme &other) const
 {
@@ -206,15 +214,21 @@ QString Theme::render(const QString &templateName, const QVariantHash &data, con
     if (!d->loader->canLoadTemplate(templateName)) {
         qCWarning(GRANTLEETHEME_LOG) << "Cannot load template" << templateName
                                      << ", please check your installation. Tried in these dirs:" << d->loader->templateDirs();
-        return QString();
+        return {};
     }
-
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
     Grantlee::Template tpl = d->loader->loadByName(templateName, ThemePrivate::sEngine);
+#else
+    KTextTemplate::Template tpl = d->loader->loadByName(templateName, ThemePrivate::sEngine);
+#endif
     if (!tpl || tpl->error()) {
         return d->errorTemplate(i18n("Template parsing error"), templateName, tpl);
     }
-
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
     Grantlee::Context ctx = d->createContext(data, applicationDomain);
+#else
+    KTextTemplate::Context ctx = d->createContext(data, applicationDomain);
+#endif
     const QString result = tpl->render(&ctx);
     if (tpl->error()) {
         return d->errorTemplate(i18n("Template rendering error"), templateName, tpl);

@@ -3,20 +3,22 @@ Section: libs
 Priority: optional
 Maintainer: Debian Qt/KDE Maintainers <debian-qt-kde@lists.debian.org>
 Uploaders: Sandro Knauß <hefee@debian.org>,
-           Norbert Preining <norbert@preining.info>,
+           Patrick Franz <deltaone@debian.org>,
 Build-Depends: cmake (>= 3.16~),
                debhelper-compat (= 13),
-               extra-cmake-modules (>= 5.83.0~),
+               dh-sequence-grantlee,
+               dh-sequence-kf5,
+               dh-sequence-pkgkde-symbolshelper,
+               extra-cmake-modules (>= 5.99.0~),
                libgrantlee5-dev (>= 5.2~),
-               libkf5guiaddons-dev (>= 5.83.0~),
-               libkf5i18n-dev (>= 5.83.0~),
-               libkf5iconthemes-dev (>= 5.83.0~),
-               libkf5newstuff-dev (>= 5.83.0~),
-               pkg-kde-tools (>= 0.12),
-               qtbase5-dev (>= 5.15.0~),
-               xauth,
-               xvfb,
-Standards-Version: 4.6.0
+               libkf5guiaddons-dev (>= 5.99.0~),
+               libkf5i18n-dev (>= 5.99.0~),
+               libkf5iconthemes-dev (>= 5.99.0~),
+               libkf5newstuff-dev (>= 5.99.0~),
+               qtbase5-dev (>= 5.15.2~),
+               xauth <!nocheck>,
+               xvfb <!nocheck>,
+Standards-Version: 4.6.2
 Homepage: https://invent.kde.org/pim/grantleetheme
 Vcs-Browser: https://salsa.debian.org/qt-kde-team/kde/grantleetheme
 Vcs-Git: https://salsa.debian.org/qt-kde-team/kde/grantleetheme.git
@@ -26,8 +28,9 @@ Package: libkf5grantleetheme-dev
 Section: libdevel
 Architecture: any
 Multi-Arch: same
-Depends: libkf5grantleetheme5 (= ${binary:Version}),
-         qtbase5-dev (>= 5.15.0~),
+Depends: libgrantlee5-dev (>= 5.2~),
+         libkf5grantleetheme5 (= ${binary:Version}),
+         qtbase5-dev (>= 5.15.2~),
          ${misc:Depends},
          ${shlibs:Depends},
 Description: KDE PIM grantlee theme support - devel files
@@ -38,9 +41,9 @@ Description: KDE PIM grantlee theme support - devel files
 Package: libkf5grantleetheme-plugins
 Architecture: any
 Multi-Arch: same
-Depends: ${misc:Depends}, ${shlibs:Depends}
-Breaks: libkf5libkdepim5 (<= 4:16.04)
-Replaces: libkf5libkdepim5 (<= 4:16.04)
+Depends: ${grantlee:Depends}, ${misc:Depends}, ${shlibs:Depends},
+Breaks: libkf5libkdepim5 (<= 4:16.04),
+Replaces: libkf5libkdepim5 (<= 4:16.04),
 Description: KDE PIM grantlee theme support - plugins
  This library provides the grantlee theme support for KDE PIM.
  .
@@ -49,12 +52,12 @@ Description: KDE PIM grantlee theme support - plugins
 Package: libkf5grantleetheme5
 Architecture: any
 Multi-Arch: same
-Depends: ${misc:Depends}, ${shlibs:Depends}
-Breaks: libkf5libkdepim5 (<= 4:16.04)
-Replaces: libkf5libkdepim5 (<= 4:16.04)
-Recommends: libkf5grantleetheme-plugins (= ${binary:Version})
+Depends: ${misc:Depends}, ${shlibs:Depends},
+Breaks: libkf5libkdepim5 (<= 4:16.04),
+Replaces: libkf5libkdepim5 (<= 4:16.04),
+Recommends: libkf5grantleetheme-plugins (= ${binary:Version}),
 Description: KDE PIM grantlee theme support - library
  This library provides the grantlee theme support for KDE PIM.
  .
  This package provides the shared libraries.
-Provides: ${ABI:VirtualPackage}
+Provides: ${ABI:VirtualPackage},

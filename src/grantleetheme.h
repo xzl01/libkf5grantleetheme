@@ -1,5 +1,5 @@
 /*
-  SPDX-FileCopyrightText: 2013-2021 Laurent Montel <montel@kde.org>
+  SPDX-FileCopyrightText: 2013-2022 Laurent Montel <montel@kde.org>
 
   SPDX-License-Identifier: LGPL-2.1-or-later
 */
@@ -17,7 +17,9 @@ class GrantleeThemeTest;
 namespace GrantleeTheme
 {
 class ThemeManager;
+class ThemeManagerPrivate;
 class ThemePrivate;
+
 /**
  * @brief The Theme class
  */
@@ -51,9 +53,9 @@ public:
 private:
     friend class ::GrantleeThemeTest;
     friend class ThemeManager;
+    friend class ThemeManagerPrivate;
     Theme(const QString &themePath, const QString &dirName, const QString &defaultDesktopFileName);
 
     QSharedDataPointer<ThemePrivate> d;
 };
 }
-

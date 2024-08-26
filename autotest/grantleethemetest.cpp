@@ -1,5 +1,5 @@
 /*
-  SPDX-FileCopyrightText: 2014-2021 Laurent Montel <montel@kde.org>
+  SPDX-FileCopyrightText: 2014-2022 Laurent Montel <montel@kde.org>
 
   SPDX-License-Identifier: LGPL-2.1-or-later
 */
@@ -7,8 +7,10 @@
 #include "grantleethemetest.h"
 #include "grantleetheme.h"
 
+#include <QFile>
 #include <QPalette>
 #include <QProcess>
+#include <QRegularExpression>
 #include <QStandardPaths>
 #include <qtest.h>
 
@@ -27,9 +29,7 @@ GrantleeThemeTest::GrantleeThemeTest(QObject *parent)
     qputenv("XDG_DATA_DIRS", GRANTLEETHEME_DATA_DIR);
 }
 
-GrantleeThemeTest::~GrantleeThemeTest()
-{
-}
+GrantleeThemeTest::~GrantleeThemeTest() = default;
 
 void GrantleeThemeTest::shouldHaveDefaultValue()
 {
@@ -96,12 +96,13 @@ bool GrantleeThemeTest::validateHtml(const QString &themePath, const QString &na
     const QString htmlFileName = themePath + QStringLiteral("/%1.out.html").arg(name);
     QFile outFile(outFileName);
     if (!outFile.open(QIODevice::WriteOnly)) {
+        qDebug() << "impossible to open " << outFile.fileName();
         return false;
     }
     outFile.write(html.toUtf8());
     outFile.close();
 
-    // validate xml and pretty-print for comparisson
+    // validate xml and pretty-print for comparison
     // TODO add proper cmake check for xmllint and diff
     const QStringList args =
         {QStringLiteral("--format"), QStringLiteral("--encode"), QStringLiteral("UTF8"), QStringLiteral("--output"), htmlFileName, outFileName};
@@ -110,9 +111,9 @@ bool GrantleeThemeTest::validateHtml(const QString &themePath, const QString &na
     return result == 0;
 }
 
-bool GrantleeThemeTest::compareHtml(const QString &themePath, const QString &name)
+bool GrantleeThemeTest::compareHtml(const QString &generatedTheme, const QString &themePath, const QString &name)
 {
-    const QString htmlFileName = themePath + QStringLiteral("/%1.out.html").arg(name);
+    const QString htmlFileName = generatedTheme + QStringLiteral("/%1.out.html").arg(name);
     const QString referenceFileName = themePath + QStringLiteral("/%1_expected.html").arg(name);
 
     // get rid of system dependent or random paths
@@ -123,7 +124,7 @@ bool GrantleeThemeTest::compareHtml(const QString &themePath, const QString &nam
         }
         QString content = QString::fromUtf8(f.readAll());
         f.close();
-        content.replace(QRegExp(QLatin1String("\"file:[^\"]*[/(?:%2F)]([^\"/(?:%2F)]*)\"")), QStringLiteral("\"file:\\1\""));
+        content.replace(QRegularExpression(QLatin1String("\"file:[^\"]*[/(?:%2F)]([^\"/(?:%2F)]*)\"")), QStringLiteral("\"file:\\1\""));
         if (!f.open(QIODevice::WriteOnly | QIODevice::Truncate)) {
             return false;
         }
@@ -164,6 +165,8 @@ void GrantleeThemeTest::testRenderTemplate()
     QFETCH(QString, templateBasename);
 
     const QString themePath = QStringLiteral(GRANTLEETHEME_DATA_DIR "/themes/") + dirname;
+    const QString themeBinaryPath = QStringLiteral(GRANTLEETHEME_DATA_BUILD_DIR "/themes/") + dirname;
+    QDir().mkpath(themeBinaryPath);
 
     QVariantHash data;
     data[QStringLiteral("icon")] = QStringLiteral("kde");
@@ -186,11 +189,11 @@ void GrantleeThemeTest::testRenderTemplate()
     if (isValid) {
         const QString result = theme.render(templateBasename + QStringLiteral(".html"), data);
 
-        QVERIFY(validateHtml(themePath, templateBasename, result));
-        QVERIFY(compareHtml(themePath, templateBasename));
+        QVERIFY(validateHtml(themeBinaryPath, templateBasename, result));
+        QVERIFY(compareHtml(themeBinaryPath, themePath, templateBasename));
 
-        QFile::remove(themePath + QLatin1Char('/') + templateBasename + QStringLiteral(".out"));
-        QFile::remove(themePath + QLatin1Char('/') + templateBasename + QStringLiteral(".out.html"));
+        QFile::remove(themeBinaryPath + QLatin1Char('/') + templateBasename + QStringLiteral(".out"));
+        QFile::remove(themeBinaryPath + QLatin1Char('/') + templateBasename + QStringLiteral(".out.html"));
     }
 }
 

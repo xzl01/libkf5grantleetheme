@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2021-01-27 03:06+0100\n"
+"POT-Creation-Date: 2022-05-17 00:45+0000\n"
 "PO-Revision-Date: 2020-09-20 13:13+0100\n"
 "Last-Translator: Sergiu Bivol <sergiu@cip.md>\n"
 "Language-Team: Romanian\n"
@@ -18,32 +18,36 @@ msgstr ""
 "20)) ? 1 : 2;\n"
 "X-Generator: Lokalize 19.12.3\n"
 
-#: grantleetheme.cpp:91
+#: grantleetheme.cpp:93 grantleetheme.cpp:101
 #, kde-format
 msgid "Template"
 msgstr "Șablon"
 
-#: grantleetheme.cpp:91
+#: grantleetheme.cpp:93 grantleetheme.cpp:101
 #, kde-format
 msgid "Error message"
 msgstr "Mesaj de eroare"
 
-#: grantleetheme.cpp:97
+#: grantleetheme.cpp:108
 #, kde-format
 msgid "(null template)"
 msgstr "(șablon nul)"
 
-#: grantleetheme.cpp:214
+#: grantleetheme.cpp:225
 #, kde-format
 msgid "Template parsing error"
 msgstr "Eroare de parcurgere a șablonului"
 
-#: grantleetheme.cpp:220
+#: grantleetheme.cpp:234
 #, kde-format
 msgid "Template rendering error"
 msgstr "Eroare de randare a șablonului"
 
-#: grantleethememanager.cpp:41
-#, kde-format
-msgid "Download New Themes..."
+#: grantleethememanager.cpp:42
+#, fuzzy, kde-format
+#| msgid "Download New Themes..."
+msgid "Download new Templates..."
 msgstr "Descarcă tematici noi..."
+
+#~ msgid "Download New Themes..."
+#~ msgstr "Descarcă tematici noi..."
